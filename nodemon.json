@@ -1,0 +1,6 @@
+{
+  "_comment" : "informando ao nodemon que todo arquivo .js vai ser executado atraves do sucrase-node e nao do node",
+  "execMap" : {
+    "js" : "sucrase-node"
+  }
+}
