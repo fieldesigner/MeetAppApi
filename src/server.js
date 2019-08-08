@@ -1,4 +1,4 @@
-//importando a classe App
+// importando a classe App
 import app from './app';
 
 // configurando porta de acesso a aplicação

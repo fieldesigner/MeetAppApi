@@ -2,7 +2,7 @@
 importando do express o Router para separar a parte de 
 roteamento em outro arquivo sem precisar importar todo o express 
 */
-//antes era: const { Router } = require('express');
+// antes era: const { Router } = require('express');
 import { Router } from 'express';
 
 // refer upload de arquivos
@@ -10,7 +10,7 @@ import multer from 'multer';
 import multerConfig from './config/multer';
 
 // importando models temporario para teste
-//import User from './app/models/User';
+// import User from './app/models/User';
 
 /* middleware para pegar o token do usuario e 
 proteger rotas internas que precisam estar logado para acessar */
@@ -22,7 +22,7 @@ import UserController from './app/controllers/UserController';
 // usado no login do usuário
 import SessionController from './app/controllers/SessionController';
 
-// usado no upload de arquivos 
+// usado no upload de arquivos
 import FileController from './app/controllers/FileController';
 
 // usado para o agendamento de evento
@@ -72,5 +72,5 @@ routes.get('/', async (req, res) => {
 */
 
 // exportando as rotas
-//antes era: module.exports = routes;
+// antes era: module.exports = routes;
 export default routes;

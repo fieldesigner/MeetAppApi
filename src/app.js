@@ -9,13 +9,12 @@ import express from 'express';
 import routes from './routes';
 
 // importando database.js
-import './database/';
+import './database';
 
-
-//definindo classe do app
-class App{
-  //método constructor é chamado automaticamente quando a classe é instaciada
-  constructor(){
+// definindo classe do app
+class App {
+  // método constructor é chamado automaticamente quando a classe é instaciada
+  constructor() {
     this.server = express();
 
     /*
@@ -27,16 +26,16 @@ class App{
   }
 
   // métodod middlewares: configurando aplicação para ler e enviar requisições em json
-  middlewares(){
+  middlewares() {
     this.server.use(express.json());
   }
 
   // métodod routes: configurando para buscar as rotas do arquivo routes.js
-  routes(){
-    this.server.use(routes)
+  routes() {
+    this.server.use(routes);
   }
 }
 
 // exportando a classe App
-//antes era: module.exports = new App().server;
+// antes era: module.exports = new App().server;
 export default new App().server;

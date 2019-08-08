@@ -9,28 +9,27 @@ import databaseConfig from '../config/database';
 // array com todos os models da aplicação
 const models = [User, Files, Meetup, Subscriptions];
 
-class Database{
-  constructor(){
+class Database {
+  constructor() {
     this.init();
-    this.mongo()
+    this.mongo();
   }
 
-  init(){
+  init() {
     this.connection = new Sequelize(databaseConfig);
 
     // percorrendo os models
     models
-    .map(model => model.init(this.connection))
-    .map(model => model.associate && model.associate(this.connection.models));
+      .map(model => model.init(this.connection))
+      .map(model => model.associate && model.associate(this.connection.models));
   }
 
-  mongo(){
-    this.mongoConnetion = mongoose.connect(
-      process.env.MONGO_URL,
-      {useNewUrlParser: true, useFindAndModify: true }
-    )
+  mongo() {
+    this.mongoConnetion = mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useFindAndModify: true,
+    });
   }
-  
 }
 
 export default new Database();

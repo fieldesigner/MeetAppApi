@@ -1,14 +1,19 @@
 import * as Yup from 'yup'; // usando para validar as informações do form
+import { Op } from 'sequelize';
+import {
+  isBefore,
+  startOfDay,
+  startOfHour,
+  endOfDay,
+  parseISO,
+} from 'date-fns';
 import Meetup from '../models/Meetup';
 import User from '../models/User';
 import Files from '../models/Files';
-import { Op } from 'sequelize';
-import { isBefore, startOfDay, endOfDay, parseISO } from 'date-fns';
 
 class MeetupController {
   // cadastra evento
-  async store(req, res){
-
+  async store(req, res) {
     // validando informações
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -18,7 +23,7 @@ class MeetupController {
       id_image: Yup.number().required(),
     });
 
-    if(!(await schema.isValid(req.body))){
+    if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Erro de validação' });
     }
 
@@ -27,8 +32,8 @@ class MeetupController {
     // tranformando a var date (string) passado pelo usuario em formato date do javascritp
     const hourStart = startOfHour(parseISO(date));
     // verificando se horario de agendamento já passou
-    if(isBefore(hourStart, new Date())){
-      return res.status(400).json({ error: 'data não permitida '});
+    if (isBefore(hourStart, new Date())) {
+      return res.status(400).json({ error: 'data não permitida ' });
     }
 
     // se chegou aqui pode gravar
@@ -41,13 +46,12 @@ class MeetupController {
       id_image,
       user_id,
     });
-    
 
     return res.json(meetup);
   }
 
   // atualização do evento
-  async update(req, res){
+  async update(req, res) {
     // validando informações
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -57,43 +61,43 @@ class MeetupController {
       id_image: Yup.number().required(),
     });
 
-    if(!(await schema.isValid(req.body))){
+    if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Erro de validação' });
     }
 
     const meetup = await Meetup.findByPk(req.params.id);
 
     // verificando se é responsável pelo evento
-    if(!meetup || meetup.user_id !== req.userId){
+    if (!meetup || meetup.user_id !== req.userId) {
       return res.status(401).json({ error: 'Permissão negada' });
     }
 
-    if(meetup.past == true){
+    if (meetup.past === true) {
       return res.status(401).json({
-        error: "O prazo máximo para modificação deste evento já passou.",
+        error: 'O prazo máximo para modificação deste evento já passou.',
       });
     }
 
     // tranformando a var date (string) passado pelo usuario em formato date do javascritp
     const hourStart = startOfHour(parseISO(req.body.date));
     // verificando se horario de agendamento já passou
-    if(isBefore(hourStart, new Date())){
-      return res.status(400).json({ error: 'data não permitida '});
+    if (isBefore(hourStart, new Date())) {
+      return res.status(400).json({ error: 'data não permitida ' });
     }
 
     // se chegou aqui pode atualizar
-    await meetup.update(req.body);    
+    await meetup.update(req.body);
 
     return res.json(meetup);
   }
 
   // listagem dos eventos do usuario logado.
-  async index(req, res){
+  async index(req, res) {
     // para paginação e informando valor padrão 1 caso nao tenha passo a pagina
     const { page = 1 } = req.query;
-    const where = { user_id: req.userId, };
+    const where = { user_id: req.userId };
 
-    if(req.query.date){
+    if (req.query.date) {
       const dateMeet = parseISO(req.query.date);
       where.date = {
         [Op.between]: [startOfDay(dateMeet), endOfDay(dateMeet)],
@@ -110,29 +114,27 @@ class MeetupController {
     return res.json(meetups);
   }
 
-  async delete(req, res){
+  async delete(req, res) {
     // validando informações
-  
+
     const meetup = await Meetup.findByPk(req.params.id);
 
     // verificando se é responsável pelo evento
-    if(!meetup || meetup.user_id !== req.userId){
+    if (!meetup || meetup.user_id !== req.userId) {
       return res.status(401).json({ error: 'Permissão negada' });
     }
 
-    if(meetup.past == true){
+    if (meetup.past === true) {
       return res.status(401).json({
-        error: "O prazo máximo para modificação deste evento já passou.",
+        error: 'O prazo máximo para modificação deste evento já passou.',
       });
     }
 
     // se chegou aqui pode atualizar
-    await meetup.destroy();    
+    await meetup.destroy();
 
-    return res.json({ sucess : "evento excluido com sucesso "});
+    return res.json({ sucess: 'evento excluido com sucesso ' });
   }
-
-
 }
 
 export default new MeetupController();
