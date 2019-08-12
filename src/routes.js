@@ -1,6 +1,6 @@
-/* 
-importando do express o Router para separar a parte de 
-roteamento em outro arquivo sem precisar importar todo o express 
+/*
+importando do express o Router para separar a parte de
+roteamento em outro arquivo sem precisar importar todo o express
 */
 // antes era: const { Router } = require('express');
 import { Router } from 'express';
@@ -12,7 +12,7 @@ import multerConfig from './config/multer';
 // importando models temporario para teste
 // import User from './app/models/User';
 
-/* middleware para pegar o token do usuario e 
+/* middleware para pegar o token do usuario e
 proteger rotas internas que precisam estar logado para acessar */
 import authMiddleware from './app/middlewares/auth';
 
@@ -54,6 +54,7 @@ routes.post('/files', upload.single('file'), FileController.store);
 routes.post('/meetups', MeetupController.store);
 routes.put('/meetups/:id', MeetupController.update);
 routes.get('/meetups', MeetupController.index);
+routes.get('/meetups/:id', MeetupController.indexById);
 routes.delete('/meetups/:id', MeetupController.delete);
 
 routes.post('/subscription', SubscriptionController.store);

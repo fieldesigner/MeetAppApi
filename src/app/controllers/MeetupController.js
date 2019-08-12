@@ -114,6 +114,18 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  // detalhes do evento.
+  async indexById(req, res) {
+    const meetup = await Meetup.findByPk(req.params.id, {
+      include: [Files],
+    });
+    // verificando se é responsável pelo evento
+    if (!meetup || meetup.user_id !== req.userId) {
+      return res.status(401).json({ error: 'Permissão negada' });
+    }
+    return res.json(meetup);
+  }
+
   async delete(req, res) {
     // validando informações
 
