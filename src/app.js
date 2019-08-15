@@ -5,6 +5,7 @@ import 'dotenv/config'; // variaveis de ambiente que esta na raiz no arquivo .en
 import express from 'express';
 
 import cors from 'cors';
+import path from 'path';
 
 // importando rotas do arquivo externo routes.js
 // antes era const routes = require('./routes');
@@ -31,6 +32,10 @@ class App {
   middlewares() {
     this.server.use(cors());
     this.server.use(express.json());
+    this.server.use(
+      '/files',
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+    );
   }
 
   // métodod routes: configurando para buscar as rotas do arquivo routes.js
