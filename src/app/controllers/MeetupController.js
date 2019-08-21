@@ -114,6 +114,29 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  // listagem dos eventos de todos os usuarios.
+  async indexForAll(req, res) {
+    // para paginação e informando valor padrão 1 caso nao tenha passo a pagina
+    const { page = 1 } = req.query;
+    const where = {};
+
+    if (req.query.date) {
+      const dateMeet = parseISO(req.query.date);
+      where.date = {
+        [Op.between]: [startOfDay(dateMeet), endOfDay(dateMeet)],
+      };
+    }
+
+    const meetups = await Meetup.findAll({
+      where,
+      order: ['date'],
+      limit: 10,
+      offset: (page - 1) * 10,
+      include: [User, Files],
+    });
+    return res.json(meetups);
+  }
+
   // detalhes do evento.
   async indexById(req, res) {
     const meetup = await Meetup.findByPk(req.params.id, {
