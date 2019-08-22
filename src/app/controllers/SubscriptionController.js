@@ -81,7 +81,7 @@ class SubscriptionController {
     return res.json(subscriptOk);
   }
 
-  async unstore(req, res) {
+  async delete(req, res) {
     const { meetup_id } = req.body;
     const meetup = await Meetup.findByPk(meetup_id, {
       include: [

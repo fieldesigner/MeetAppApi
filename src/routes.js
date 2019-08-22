@@ -59,7 +59,7 @@ routes.get('/meetup/:id', MeetupController.indexById);
 routes.delete('/meetups/:id', MeetupController.delete);
 
 routes.post('/subscription', SubscriptionController.store);
-routes.post('/unsubscription', SubscriptionController.unstore);
+routes.post('/unsubscription', SubscriptionController.delete);
 
 routes.get('/registered', RegisteredController.index);
 
