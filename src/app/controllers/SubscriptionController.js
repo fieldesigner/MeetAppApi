@@ -80,6 +80,31 @@ class SubscriptionController {
 
     return res.json(subscriptOk);
   }
+
+  async unstore(req, res) {
+    const { meetup_id } = req.body;
+    const meetup = await Meetup.findByPk(meetup_id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+
+    if (!meetup) {
+      return res.status(401).json({ error: 'Evento inexistente' });
+    }
+
+    const subscript = await Subscriptions.findOne({
+      where: { user_id: req.userId, meetup_id: meetup.id },
+    });
+    if (subscript) {
+      await subscript.destroy();
+    }
+
+    return res.json({ sucess: 'Você não esta mais inscrito para este evento' });
+  }
 }
 
 export default new SubscriptionController();
