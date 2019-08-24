@@ -82,18 +82,12 @@ class SubscriptionController {
   }
 
   async delete(req, res) {
-    const { meetup_id } = req.body;
-    const meetup = await Meetup.findByPk(meetup_id, {
-      include: [
-        {
-          model: User,
-          attributes: ['name', 'email'],
-        },
-      ],
-    });
+    const meetup_id = req.params.id;
+    console.log(meetup_id);
+    const meetup = await Meetup.findByPk(meetup_id);
 
     if (!meetup) {
-      return res.status(401).json({ error: 'Evento inexistente' });
+      return res.status(401).json({ error: '* Evento inexistente' });
     }
 
     const subscript = await Subscriptions.findOne({

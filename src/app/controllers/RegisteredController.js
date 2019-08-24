@@ -1,6 +1,8 @@
 import { Op } from 'sequelize';
 import Meetup from '../models/Meetup';
 import Subscriptions from '../models/Subscriptions';
+import User from '../models/User';
+import Files from '../models/Files';
 
 class RegisteredController {
   // listagem dos eventos que esta instrito do usuario logado.
@@ -20,6 +22,7 @@ class RegisteredController {
               [Op.gt]: new Date(), // > data atual
             },
           },
+          include: [User, Files],
           required: true,
         },
       ],
